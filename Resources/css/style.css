@@ -1,0 +1,23 @@
+* {
+  -webkit-user-select: none;
+  font-family: Helvetica;
+}
+
+div {
+  position: relative;
+}
+
+body.main {
+  background: #2d92ff url(../images/bg_body_main.png) no-repeat center -60px;
+  font-size: 18px;
+  text-shadow: #FFF 0 1px 1px;
+}
+
+.main textarea {
+  margin: 8px;
+  background: #FFF;
+  border: 0;
+  height: 100px;
+  width: 294px;
+  color: #000;
+}
