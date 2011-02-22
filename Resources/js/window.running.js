@@ -50,6 +50,7 @@ action.addEventListener('click', function(){
   win.close();
 });
 
+/*
 var sms_demo = Titanium.UI.createButton({title: 'SMS'});
 win.rightNavButton = sms_demo;
 
@@ -62,3 +63,4 @@ sms_demo.addEventListener('click', function(){
   xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=98becb860b65396dfbaa0bab81096254&data=[{"number":"7408159478"},{"number":"2163751978"}]');
   xhr.send();
 });
+*/
