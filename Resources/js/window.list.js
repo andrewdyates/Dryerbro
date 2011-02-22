@@ -17,6 +17,38 @@ var btn_add = Titanium.UI.createButton({title: 'Add'});
 win.rightNavButton = btn_add;
 
 btn_add.addEventListener('click', function(){
+  var methods = {
+    selectedProperty: function(e) {
+      var person = {
+        name: e.person.fullName
+      }
+      if(e.property == 'iphone' || e.property == 'phone') {
+        person.number = e.value;
+        var dialog = Titanium.UI.createOptionDialog({
+          options:['Call: ' + e.value, 'SMS: ' + e.value],
+          title: 'Bro, how you tryina shout?'
+        });
+        dialog.addEventListener('click',function(e){
+          if(e.index == 0){
+            person.method = 'call';
+          } else {
+            person.method = 'sms';
+          }
+          persons.add(person);
+          renderTable();
+        });
+        dialog.show();
+      } else if(e.property == 'email'){
+        person.method = 'mail';
+        person.mail = e.value;
+        persons.add(person);
+        renderTable();
+      } else {
+        return; // ERROR
+      }
+    }
+  };
+  Titanium.Contacts.showContacts(methods);
 });
 
 function buildRow(person){
@@ -92,11 +124,15 @@ win.add(table);
 
 var persons = (new Persons()).demo();
 
-var
-  tableRows = [],
-  len = persons.length;
+function renderTable(){
+  var
+    tableRows = [],
+    len = persons.length;
+  
+  for(var i = 0; i<len; i++)
+    tableRows.push(buildRow(persons.get(i)));
+  
+  table.setData(tableRows);
+}
 
-for(var i = 0; i<len; i++)
-  tableRows.push(buildRow(persons.get(i)));
-
-table.setData(tableRows);
+renderTable();

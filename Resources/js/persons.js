@@ -1,6 +1,6 @@
 function Persons(){
   this.persons = [];
-  return this.finalize();
+  return this._finalize();
 }
 
 Persons.prototype.demo = function(){
@@ -17,32 +17,43 @@ Persons.prototype.demo = function(){
     name: 'Eric Kerr',
     method: 'sms'
   }];
-  return this.finalize();
+  return this._finalize();
 }
+
+Persons.prototype._isDuplicatePerson = function(person){
+  for(var i = 0, len = this.persons.length; i < len; i++){
+    var compare = this.get(i);
+    if(person.name == compare.name && person.method == compare.method) return true;
+  }
+  return false;
+}
+
+Persons.prototype._finalize = function(){
+  this.length = this.persons.length;
+  return this;
+}
+
 
 Persons.prototype.load = function(){ //Database Load
   //TODO(eric);
-  return this.finalize();
+  return this._finalize();
 }
 
 Persons.prototype.save = function(){ //Database Save
   //TODO(eric)
-  return this.finalize();
+  return this._finalize();
 }
 
 Persons.prototype.add = function(person){
-  this.persons.add(person);
-  return this.finalize();
+  if(!this._isDuplicatePerson(person)){
+    this.persons.push(person);
+  }
+  return this._finalize();
 }
 
 Persons.prototype.remove = function(index){
   this.persons.remove(index);
-  return this.finalize();
-}
-
-Persons.prototype.finalize = function(){
-  this.length = this.persons.length;
-  return this;
+  return this._finalize();
 }
 
 Persons.prototype.get = function(index){
