@@ -70,6 +70,10 @@ if (!Array.prototype.remove) {
     };
 }
 
+Array.prototype.random = function(){
+  return this[Math.floor(Math.random() * this.length)];
+}
+
 Array.prototype.sum = function(){
     for(var i = 0, sum = 0, len = this.length; i < len; sum += this[i++]);
     return sum;
