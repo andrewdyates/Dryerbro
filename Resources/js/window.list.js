@@ -1,8 +1,15 @@
 Ti.include("message.js");
+Ti.include("persons.js");
 
 Array.prototype.random = function(){
   return this[Math.floor(Math.random() * this.length)];
 }
+
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
+};
 
 var win = Titanium.UI.currentWindow;
 
@@ -10,14 +17,11 @@ var btn_add = Titanium.UI.createButton({title: 'Add'});
 win.rightNavButton = btn_add;
 
 btn_add.addEventListener('click', function(){
-  
 });
-
-var rows = [];
 
 function buildRow(person){
   
-  person = {
+  person = person || {
     name: 'Eric Kerr',
     method: ['call', 'sms', 'mail'].random()
   }
@@ -56,16 +60,43 @@ function buildRow(person){
   return row;
 }
 
-rows[0] = buildRow();
-rows[1] = buildRow();
-rows[2] = buildRow();
-rows[3] = buildRow();
-
-var table = Ti.UI.createTableView({
-  data:rows,
+var table = Titanium.UI.createTableView({
+  data:[],
   backgroundColor: 'transparent',
   backgroundRowColor: 'transparent',
   borderColor: '#8dbcef'
 });
 
+table.addEventListener('click', function(e){
+  var rowIndex = e.index, person = persons.get(e.index);
+  var method = {
+    'call': 'Call',
+    'sms': 'SMS',
+    'mail': 'Mail'
+  }[person.method];
+  
+  var alert = Titanium.UI.createAlertDialog({
+    title: person.name + ' (' + method + ')',
+    message: 'Do you want to remove this bro?',
+    buttonNames: ['Cancel','OK']
+  });
+  alert.addEventListener('click', function(e){
+    if(e.index == 0) return; //They canceled
+    table.deleteRow(rowIndex);
+    persons.remove(rowIndex).save();
+  });
+  alert.show();
+});
+
 win.add(table);
+
+var persons = (new Persons()).demo();
+
+var
+  tableRows = [],
+  len = persons.length;
+
+for(var i = 0; i<len; i++)
+  tableRows.push(buildRow(persons.get(i)));
+
+table.setData(tableRows);

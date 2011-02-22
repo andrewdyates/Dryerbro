@@ -1,5 +1,9 @@
 Ti.include("message.js");
 
+String.prototype.pluralize = function(count) {
+  return count == 0 ? (count + ' ' + this) : (count + ' ' + this + 's');
+}
+
 var win = Titanium.UI.currentWindow;
 
 tf_default = "Hey bro, laundry's done!";
