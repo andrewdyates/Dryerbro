@@ -13,6 +13,7 @@ Config = {
     last300Values: [],
 	i: 0,
 	avg: 0,
+	VIBRATION_THRESHOLD: 20,
 	
 	_checkArray: function(e) {
 		int numNonZeros;
@@ -26,7 +27,7 @@ Config = {
 			}
 		}
 		average = total / numNonZeros;		
-		if (average < 0.02) {
+		if (average < this.VIBRATION_THRESHOLD) {
 			Ti.App.fireEvent("off");
 		}
     },
@@ -37,13 +38,13 @@ Config = {
 		 * Each call checks recent values and determines if the dryer is on or off.
 		 * 
 		 * Args:
-		 *   e: accelererometer value in m/s^2
+		 *   e: accelererometer value in mm/s^2
 		 */
 		var sa
 		this.last300Values[this.i % 300] = e;
 		this.i++;
 		
-		if (e < 0.02) {
+		if (e < this.VIBRATION_THRESHOLD) {
 			this._checkArray(e);
 		} else {
 			Ti.App.fireEvent("on");
