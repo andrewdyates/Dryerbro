@@ -1,12 +1,17 @@
 Ti.include("message.js");
+Ti.include("persons.js");
 
 String.prototype.pluralize = function(count) {
-  return count == 0 ? (count + ' ' + this) : (count + ' ' + this + 's');
+  return count == 1 ? (count + ' ' + this) : (count + ' ' + this + 's');
 }
 
 var win = Titanium.UI.currentWindow;
+var persons = new Persons();
 
-tf_default = "Hey bro, laundry's done!";
+tf_default = Titanium.App.Properties.getString("message");
+if(tf_default == null || tf_default.length == 0){
+  tf_default = "Hey bro, laundry's done!";
+}
 
 var tf = Titanium.UI.createTextArea({
     value: tf_default,
@@ -35,6 +40,7 @@ tf.addEventListener('focus', function(){
 tf.addEventListener('blur', function(){
   if(tf.value == '') tf.value = tf_default;
   action.show();
+  Titanium.App.Properties.setString("message", tf.value)
   tf.height = 100;
 });
 tf.show();
@@ -68,9 +74,14 @@ var bros_count = Titanium.UI.createTextField({
   editable: false,
   enabled: false,
   right: 26,
-  value: '0 bros'
+  value: 'bro'.pluralize(persons.length)
 });
 bros.add(bros_count);
+
+Ti.App.addEventListener('personsChange', function(){
+  persons.load(); //Reload
+  bros_count.setValue('bro'.pluralize(persons.length));
+});
 
 var bros_arrow = Titanium.UI.createView({
   width: 10,

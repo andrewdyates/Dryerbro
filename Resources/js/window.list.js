@@ -23,7 +23,7 @@ btn_add.addEventListener('click', function(){
         name: e.person.fullName
       }
       if(e.property == 'iphone' || e.property == 'phone') {
-        person.number = e.value;
+        person.handle = e.value;
         var dialog = Titanium.UI.createOptionDialog({
           options:['Call: ' + e.value, 'SMS: ' + e.value],
           title: 'Bro, how you tryina shout?'
@@ -40,12 +40,13 @@ btn_add.addEventListener('click', function(){
         dialog.show();
       } else if(e.property == 'email'){
         person.method = 'mail';
-        person.mail = e.value;
+        person.handle = e.value;
         persons.add(person);
         renderTable();
       } else {
         return; // ERROR
       }
+      persons.save();
     }
   };
   Titanium.Contacts.showContacts(methods);
@@ -122,7 +123,8 @@ table.addEventListener('click', function(e){
 
 win.add(table);
 
-var persons = (new Persons()).demo();
+//var persons = (new Persons()).demo();
+var persons = new Persons();
 
 function renderTable(){
   var
