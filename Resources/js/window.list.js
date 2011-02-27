@@ -61,7 +61,7 @@ function buildRow(person){
   
   var row = Ti.UI.createTableViewRow();
   row.borderColor = '#8dbcef';
-  row.height = 45;
+  //row.height = 45;
   
   var user = Ti.UI.createLabel({
     color:'#000',

@@ -8,13 +8,14 @@ String.prototype.pluralize = function(count) {
 var win = Titanium.UI.currentWindow;
 var persons = new Persons();
 
-tf_default = Titanium.App.Properties.getString("message");
-if(tf_default == null || tf_default.length == 0){
-  tf_default = "Hey bro, laundry's done!";
+tf_default = "Hey bro, laundry's done!";
+tf_value = Titanium.App.Properties.getString("message");
+if(tf_value == null || tf_value.length == 0){
+  tf_value = tf_default;
 }
 
 var tf = Titanium.UI.createTextArea({
-    value: tf_default,
+    value: tf_value,
     backgroundColor: '#FFF',
     height: 100,
     width: 296,
@@ -80,6 +81,7 @@ bros.add(bros_count);
 
 Ti.App.addEventListener('personsChange', function(){
   persons.load(); //Reload
+  Ti.API.info("EVENT personsChange")
   bros_count.setValue('bro'.pluralize(persons.length));
 });
 
