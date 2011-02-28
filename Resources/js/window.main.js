@@ -3,7 +3,7 @@ Ti.include("UI.helper.js");
 Ti.include("persons.js");
 
 String.prototype.pluralize = function(count) {
-  return count == 1 ? (count + ' ' + this) : (count + ' ' + this + 's');
+  return count + ' ' + this + (count == 1 ? '' : 's');
 }
 
 var win = Titanium.UI.currentWindow;

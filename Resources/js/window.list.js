@@ -45,16 +45,15 @@ btn_add.addEventListener('click', function(){
         persons.add(person);
         renderTable();
       } else {
-        var alert = Titanium.UI.createAlertDialog({
+        var err = Titanium.UI.createAlertDialog({
           title: 'Invalid Option',
           message: "You must choose a valid\nPhone Number or Email Address",
           buttonNames: ['OK, My Bad']
         });
-        alert.addEventListener('click', function(e){
-          alert.hide();
+        err.addEventListener('click', function(e){
+          err.hide();
         });
-        alert.show();
-        //return; // ERROR
+        err.show();
       }
     }
   };
@@ -70,7 +69,6 @@ function buildRow(person){
   
   var row = Ti.UI.createTableViewRow();
   row.borderColor = '#8dbcef';
-  //row.height = 45;
   
   var user = Ti.UI.createLabel({
     color:'#000',
