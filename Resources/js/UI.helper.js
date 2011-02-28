@@ -23,7 +23,7 @@ function helper(type, headingText, descText)
     font:{fontSize:13, fontFamily:'Helvetica Neue'},
     height: 13,
     left: 64,
-    top: 45,
+    top: 46,
     text: descText
   });
   elem.add(desc);
