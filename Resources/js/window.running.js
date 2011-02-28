@@ -1,9 +1,9 @@
-Ti.include("message.js");
+Ti.include("UI.message.js");
 
 var win = Titanium.UI.currentWindow;
 
 var tf = Titanium.UI.createTextArea({
-    value: '{Current Status}',
+    value: "Chill, we're waiting on your dryer...",
     backgroundColor: '#FFF',
     height: 150,
     width: 296,

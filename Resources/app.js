@@ -1,6 +1,5 @@
-//Ti.include("js/libs/jquery.1.5.js");
-Ti.include("js/vibration.js");
-Ti.include("js/message.js");
+//Ti.include("js/vibration.js");
+//Ti.include("js/UI.message.js");
 
 var tabGroup = Titanium.UI.createTabGroup({id:'tabGroup1'});
 

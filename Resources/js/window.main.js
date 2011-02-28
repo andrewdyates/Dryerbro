@@ -1,4 +1,5 @@
-Ti.include("message.js");
+Ti.include("UI.message.js");
+Ti.include("UI.helper.js");
 Ti.include("persons.js");
 
 String.prototype.pluralize = function(count) {
@@ -83,6 +84,7 @@ Ti.App.addEventListener('personsChange', function(){
   persons.load(); //Reload
   Ti.API.info("EVENT personsChange")
   bros_count.setValue('bro'.pluralize(persons.length));
+  if(persons.length > 0) broCountError.hide();
 });
 
 var bros_arrow = Titanium.UI.createView({
@@ -99,7 +101,7 @@ bros.addEventListener('click', function(){
   old_cc = bros_count.color;
   old_lc = bros_label.color;
   
-  bros.backgroundColor = '#0b2a55';
+  bros.backgroundColor = '#082137';
   bros.borderColor = '#051429';
   bros_count.color = '#FFF';
   bros_label.color = '#FFF';
@@ -119,13 +121,14 @@ bros.addEventListener('click', function(){
   Titanium.UI.currentTab.open(editwin);
   
   setTimeout(function(){
+    broCountError.hide();
+    
     bros.backgroundColor = old_bg;
     bros.borderColor = old_bc;
     bros_count.color = old_cc;
     bros_label.color = old_lc;
   }, 600);
 });
-
 
 
 var action = Titanium.UI.createButton({
@@ -141,17 +144,26 @@ var action = Titanium.UI.createButton({
 });
 win.add(action);
 
+var broCountError = helper('error', 'Hold on, Bro', "Add your bros first, then we're cool.");
+broCountError.top = 182;
+win.add(broCountError);
+
 action.addEventListener('click', function(){
-  var runningwin = Titanium.UI.createWindow({
-    url: 'window.running.js',
-    id: 'runningwin1',
-    title: 'Running',
-    barColor: '#0b2a55',
-    top: 0,
-    left: 0,
-    tabBarHidden: true,
-    backgroundImage: '../images/bg_body_main.png',
-    zIndex: 2
-  });
-  Titanium.UI.currentTab.open(runningwin);
+  if(persons.length == 0) {
+    broCountError.show();
+  } else {
+    broCountError.hide();
+    var runningwin = Titanium.UI.createWindow({
+      url: 'window.running.js',
+      id: 'runningwin1',
+      title: 'Running',
+      barColor: '#0b2a55',
+      top: 0,
+      left: 0,
+      tabBarHidden: true,
+      backgroundImage: '../images/bg_body_main.png',
+      zIndex: 2
+    });
+    Titanium.UI.currentTab.open(runningwin);
+  }
 });

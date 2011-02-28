@@ -5,7 +5,7 @@ function Persons(){
   this.persons = [];
   this.keyProperty = "persons";
   this.load();
-  return this._finalize();
+  return this;
 }
 
 Persons.prototype.demo = function(){
@@ -22,7 +22,8 @@ Persons.prototype.demo = function(){
     name: 'Eric Kerr',
     method: 'sms'
   }];
-  return this._finalize();
+  this.persons = this.persons.length;
+  return this;
 }
 
 Persons.prototype._isDuplicatePerson = function(person){
@@ -36,18 +37,12 @@ Persons.prototype._isDuplicatePerson = function(person){
   return false;
 }
 
-Persons.prototype._finalize = function(){
-  this.length = this.persons.length;
-  this.save();
-  return this;
-}
-
-
 Persons.prototype.load = function(){ //Database Load
   var persons = Titanium.App.Properties.getString(this.keyProperty);
   if(persons == null || persons.length == 0) persons = "[]";
   this.persons = JSON.parse(persons);
-  return this._finalize();
+  this.length = this.persons.length;
+  return this;
 }
 
 Persons.prototype.save = function(){ //Database Save
@@ -58,15 +53,19 @@ Persons.prototype.save = function(){ //Database Save
 Persons.prototype.add = function(person){
   if(!this._isDuplicatePerson(person)){
     this.persons.push(person);
+    this.length = this.persons.length;
+    this.save();
     Ti.App.fireEvent("personsChange");
   }
-  return this._finalize();
+  return this;
 }
 
 Persons.prototype.remove = function(index){
   this.persons.remove(index);
+  this.length = this.persons.length;
+  this.save();
   Ti.App.fireEvent("personsChange");
-  return this._finalize();
+  return this;
 }
 
 Persons.prototype.get = function(index){

@@ -1,4 +1,5 @@
-Ti.include("message.js");
+Ti.include("UI.message.js");
+Ti.include("UI.helper.js");
 Ti.include("persons.js");
 
 Array.prototype.random = function(){
@@ -44,9 +45,17 @@ btn_add.addEventListener('click', function(){
         persons.add(person);
         renderTable();
       } else {
-        return; // ERROR
+        var alert = Titanium.UI.createAlertDialog({
+          title: 'Invalid Option',
+          message: "You must choose a valid\nPhone Number or Email Address",
+          buttonNames: ['OK, My Bad']
+        });
+        alert.addEventListener('click', function(e){
+          alert.hide();
+        });
+        alert.show();
+        //return; // ERROR
       }
-      persons.save();
     }
   };
   Titanium.Contacts.showContacts(methods);
@@ -95,6 +104,7 @@ function buildRow(person){
 
 var table = Titanium.UI.createTableView({
   data:[],
+  visible: false,
   backgroundColor: 'transparent',
   backgroundRowColor: 'transparent',
   borderColor: '#8dbcef'
@@ -116,7 +126,8 @@ table.addEventListener('click', function(e){
   alert.addEventListener('click', function(e){
     if(e.index == 0) return; //They canceled
     table.deleteRow(rowIndex);
-    persons.remove(rowIndex).save();
+    persons.remove(rowIndex);
+    updateTableVisibility();
   });
   alert.show();
 });
@@ -126,15 +137,30 @@ win.add(table);
 //var persons = (new Persons()).demo();
 var persons = new Persons();
 
+var addBroTip = helper('tip', 'Pro Tip', "Press Add to hook a bro up.");
+addBroTip.top = 5;
+win.add(addBroTip);
+
 function renderTable(){
   var
-    tableRows = [],
-    len = persons.length;
+    tableRows = [];
   
-  for(var i = 0; i<len; i++)
+  for(var i = 0; i<persons.length; i++)
     tableRows.push(buildRow(persons.get(i)));
   
   table.setData(tableRows);
+  
+  updateTableVisibility();
+}
+
+function updateTableVisibility(){
+  if(persons.length == 0) {
+    table.hide();
+    addBroTip.show();
+  } else {
+    table.show();
+    addBroTip.hide();
+  }
 }
 
 renderTable();
