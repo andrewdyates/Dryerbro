@@ -79,7 +79,8 @@ bros.add(bros_count);
 
 Ti.App.addEventListener('personsChange', function(){
   persons.load(); //Reload
-  Ti.API.info("EVENT personsChange")
+  Ti.API.info("EVENT personsChange");
+  Ti.API.info("persons: " + )
   bros_count.setValue('bro'.pluralize(persons.length));
   if(persons.length > 0) broCountError.hide();
 });

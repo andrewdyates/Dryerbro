@@ -44,6 +44,7 @@ var Vibration = {
     this.items = [];
     this.mean = [];
     this.std_dev = [];
+    this.handlers = [];
   },
   
   push: function(x, y, z) {
@@ -64,21 +65,29 @@ var Vibration = {
   
   removeHandler: function(f) {
     // f is a reference to a function in self.handlers[]
-    // TODO(eric, drew)
+    var updated = [];
+    for(var i = 0, len = this.handlers.length; i < len; i++)
+      if(this.handlers[i] !== f)
+        updated.push(this.handlers[i]);
+    
+    this.handlers = updated;
+  },
+  
+  removeAllHandlers: function() {
+    this.handlers = [];
   },
   
   _executeVibrationHanders: function() {
-    for (var i=0, len=this.handlers.length; i<len; i++) {
+    for (var i=0, len=this.handlers.length; i<len; i++)
       this.handlers[i](this.vibration);
-    }
   },
   
   _scale: function(x) {
-    return Math.round(x / Sampler.UNIT_SCALE);
+    return Math.round(x / Vibration.UNIT_SCALE);
   },
   
   _unscale: function(x) {
-    return x * Sampler.UNIT_SCALE;
+    return x * Vibration.UNIT_SCALE;
   },
   
   _update: function() {

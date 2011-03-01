@@ -71,10 +71,3 @@ Persons.prototype.remove = function(index){
 Persons.prototype.get = function(index){
   return this.persons[index] || null;
 }
-
-function reportPersons(){
-  Titanium.API.info("Persons: " + Titanium.App.Properties.getString("persons"));
-}
-
-setInterval(reportPersons, 5000);
-reportPersons();

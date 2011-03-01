@@ -2,7 +2,7 @@ Ti.include("vibration.js");
 Ti.include("utils.js");
 
 var StateMachine = {
-  _state: 0,
+  _state: null,
   _states: [
     'waiting', // Waiting for Dryer to start
     'running', // Dryer has started running
@@ -10,6 +10,14 @@ var StateMachine = {
     'completed', // Dryer has stopped after running for an extended period of time
     'error' // There was an error
   ],
+  
+  WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS: 50, // Wait 5 seconds of active vibrations in waiting before moving to running
+  RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS: 15, // Wait 15 seconds of active vibrations in running before moving to extended
+  EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS: 350, // Wait 35 seconds of inactive vibrations before moving to completed
+  
+  RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
+  
+  ACTIVE_VIBRATION_THRESHOLD: 20,
   
   _vibrationHandler: null, // Pointer to vibration handler to remove later if necessary
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
@@ -20,43 +28,89 @@ var StateMachine = {
     };
     Ti.Accelerometer.addEventListener('update', this._accelerometerHandler);
     
-    this._vibrationHandler = function(v){
-      Ti.App.fireEvent('vibration', v);
-    };
-    Vibration.addHandler(this._vibrationHandler);
-    
     this.switchState('waiting');
   },
   
   switchState: function(state)
   {
-    if(state.constructor === String){ // Switching by name
-      stateIndex = this._states.indexOf(state);
-      if(stateIndex < 0) {
-        Ti.API.info("Error: Invalid State (" + stateIndex + " => " + state + ")");
-        return;
-      }
-      this._state = stateIndex;
-    } else if(state.constructor === Number){ // Switching by index
-      this._state = state;
-      state = this._states[state];
-    } else {
-      Ti.API.info("Error: Invalid State (Should be String or Number) => " + state);
+    if(this._state == state) {
+      Ti.API.info("Race Condition: State already running - " + state);
       return;
     }
+    if(this._states.indexOf(state) < 0) {
+      Ti.API.info("ERROR: Invalid State - " + state);
+      return;
+    }
+    Ti.API.info("StateMachine: Current State - " + state);
+    this._state = state;
     this['_state' + state.charAt(0).toUpperCase() + state.slice(1)]();
   },
   
   _stateWaiting: function(){
+    // Wait until we get continuous vibration for 5 seconds before proceeding
     Ti.App.fireEvent('vibrationStateWaiting');
+    
+    var that = this, sequential = 0;
+    
+    var waitingCallback = function(v) {
+      if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
+        sequential++;
+        if(sequential >= that.WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
+          Vibration.removeHandler(waitingCallback);
+          that.switchState('running');
+        }
+      } else {
+        sequential = 0;
+      }
+    }
+    Vibration.addHandler(waitingCallback);
   },
   
   _stateRunning: function(){
+    // Must have vibrations for 15 consecutive seconds, then it goes into extended mode.
+    // If 10 resets are reached, then it will throw an error.
     Ti.App.fireEvent('vibrationStateRunning');
+    
+    var that = this, sequential = 0, sequentialResets = 0;
+    
+    var runningCallback = function(v) {
+      if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
+        sequential++;
+        if(sequential >= that.RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
+          Vibration.removeHandler(runningCallback);
+          that.switchState('extended');
+        }
+      } else {
+        sequential = 0;
+        sequentialResets++;
+        if(sequentialResets > that.RUNNING_MAX_RESET_TRIES) {
+          Vibration.removeHandler(runningCallback);
+          that.switchState('error')
+        }
+      }
+    }
+    Vibration.addHandler(runningCallback);
   },
   
   _stateExtended: function(){
+    // Dryer has been opperating for at least 20 consecutive seconds.
+    // This waits for 35 consecutive seconds of the dryer being off, then the dryer is done.
     Ti.App.fireEvent('vibrationStateExtended');
+    
+    var that = this, sequential = 0;
+    
+    var extendedCallback = function(v) {
+      if(v < that.ACTIVE_VIBRATION_THRESHOLD) {
+        sequential++;
+        if(sequential >= that.EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS) {
+          Vibration.removeHandler(extendedCallback);
+          that.switchState('completed');
+        }
+      } else {
+        sequential = 0;
+      }
+    }
+    Vibration.addHandler(extendedCallback);
   },
   
   _stateCompleted: function(){
@@ -64,6 +118,6 @@ var StateMachine = {
   },
   
   _stateError: function(){
-    Ti.App.fireEvent('vibrationStateError');
+    Ti.App.fireEvent('vibrationStateError', "Not sure what's going on, there was an error.");
   }
 }

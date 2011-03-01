@@ -67,7 +67,7 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
   tf.value = "Pretty sure dryer's done, dude.";
 });
 
-Ti.App.addEventListener('vibrationStateError', function(){
+Ti.App.addEventListener('vibrationStateError', function(message){
   tf.value = "Not sure what's going on, there was an error.";
 });
 
