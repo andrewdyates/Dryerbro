@@ -1,10 +1,7 @@
 Ti.include("UI.message.js");
 Ti.include("UI.helper.js");
 Ti.include("persons.js");
-
-String.prototype.pluralize = function(count) {
-  return count + ' ' + this + (count == 1 ? '' : 's');
-}
+Ti.include("utils.js");
 
 var win = Titanium.UI.currentWindow;
 var persons = new Persons();

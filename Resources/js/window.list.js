@@ -1,16 +1,7 @@
 Ti.include("UI.message.js");
 Ti.include("UI.helper.js");
 Ti.include("persons.js");
-
-Array.prototype.random = function(){
-  return this[Math.floor(Math.random() * this.length)];
-}
-
-Array.prototype.remove = function(from, to) {
-  var rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
-};
+Ti.include("utils.js");
 
 var win = Titanium.UI.currentWindow;
 

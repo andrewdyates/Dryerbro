@@ -1,4 +1,5 @@
 Ti.include("vibration.js");
+Ti.include("utils.js");
 
 var StateMachine = {
   _state: 0,
