@@ -19,7 +19,6 @@ var StateMachine = {
   
   ACTIVE_VIBRATION_THRESHOLD: 20,
   
-  _vibrationHandler: null, // Pointer to vibration handler to remove later if necessary
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
   init: function(){
@@ -85,7 +84,7 @@ var StateMachine = {
         sequentialResets++;
         if(sequentialResets > that.RUNNING_MAX_RESET_TRIES) {
           Vibration.removeHandler(runningCallback);
-          that.switchState('error')
+          that.switchState('error');
         }
       }
     }
