@@ -1,4 +1,7 @@
 Ti.include("UI.message.js");
+Ti.include("statemachine.js");
+
+StateMachine.init();
 
 var win = Titanium.UI.currentWindow;
 
