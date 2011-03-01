@@ -80,7 +80,7 @@ bros.add(bros_count);
 Ti.App.addEventListener('personsChange', function(){
   persons.load(); //Reload
   Ti.API.info("EVENT personsChange");
-  Ti.API.info("persons: " + )
+  Ti.API.info("persons: " + Titanium.App.Properties.getString(persons.keyProperty));
   bros_count.setValue('bro'.pluralize(persons.length));
   if(persons.length > 0) broCountError.hide();
 });
