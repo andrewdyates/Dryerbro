@@ -1,3 +1,12 @@
+/* Dryer Bro
+ * http://dryerbro.com
+ * CSE 772 Capstone Project, The Ohio State University
+ * 
+ * Author: Eric Kerr
+ * Email: EricPKerr [at] gmail [dot] com
+ * URL: http://erickerr.com
+ */
+
 Ti.include("libs/json.js");
 Ti.include("libs/md5.js");
 

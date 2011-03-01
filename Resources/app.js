@@ -1,5 +1,11 @@
-//Ti.include("js/vibration.js");
-//Ti.include("js/UI.message.js");
+/* Dryer Bro
+ * http://dryerbro.com
+ * CSE 772 Capstone Project, The Ohio State University
+ * 
+ * Author: Eric Kerr
+ * Email: EricPKerr [at] gmail [dot] com
+ * URL: http://erickerr.com
+ */
 
 var tabGroup = Titanium.UI.createTabGroup({id:'tabGroup1'});
 

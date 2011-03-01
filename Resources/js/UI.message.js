@@ -1,3 +1,12 @@
+/* Dryer Bro
+ * http://dryerbro.com
+ * CSE 772 Capstone Project, The Ohio State University
+ * 
+ * Author: Eric Kerr
+ * Email: EricPKerr [at] gmail [dot] com
+ * URL: http://erickerr.com
+ */
+
 var messageWin = Titanium.UI.createWindow({
   height:30,
   width:250,
