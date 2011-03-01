@@ -6,7 +6,8 @@ var StateMachine = {
     'waiting', // Waiting for Dryer to start
     'running', // Dryer has started running
     'extended', // Dryer has been running for an extended period of time
-    'completed' // Dryer has stopped after running for an extended period of time
+    'completed', // Dryer has stopped after running for an extended period of time
+    'error' // There was an error
   ],
   
   _vibrationHandler: null, // Pointer to vibration handler to remove later if necessary
@@ -46,18 +47,22 @@ var StateMachine = {
   },
   
   _stateWaiting: function(){
-    
+    Ti.App.fireEvent('vibrationStateWaiting');
   },
   
   _stateRunning: function(){
-    
+    Ti.App.fireEvent('vibrationStateRunning');
   },
   
   _stateExtended: function(){
-    
+    Ti.App.fireEvent('vibrationStateExtended');
   },
   
   _stateCompleted: function(){
-    
+    Ti.App.fireEvent('vibrationStateCompleted');
+  },
+  
+  _stateError: function(){
+    Ti.App.fireEvent('vibrationStateError');
   }
 }

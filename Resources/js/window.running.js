@@ -1,8 +1,6 @@
 Ti.include("UI.message.js");
 Ti.include("statemachine.js");
 
-StateMachine.init();
-
 var win = Titanium.UI.currentWindow;
 
 var tf = Titanium.UI.createTextArea({
@@ -52,6 +50,28 @@ win.add(action);
 action.addEventListener('click', function(){
   win.close();
 });
+
+Ti.App.addEventListener('vibrationStateWaiting', function(){
+  tf.value = "Chill, we're waiting on your dryer...";
+});
+
+Ti.App.addEventListener('vibrationStateRunning', function(){
+  tf.value = "Dryer's good to go.  You'll be fresh in no time.";
+});
+
+Ti.App.addEventListener('vibrationStateExtended', function(){
+  tf.value = "Dryer's running great bro.";
+});
+
+Ti.App.addEventListener('vibrationStateCompleted', function(){
+  tf.value = "Pretty sure dryer's done, dude.";
+});
+
+Ti.App.addEventListener('vibrationStateError', function(){
+  tf.value = "Not sure what's going on, there was an error.";
+});
+
+StateMachine.init();
 
 /*
 var sms_demo = Titanium.UI.createButton({title: 'SMS'});
