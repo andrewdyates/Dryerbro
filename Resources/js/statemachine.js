@@ -91,7 +91,7 @@ var StateMachine = {
       } else {
         sequential = 0;
         sequentialResets++;
-        if(sequentialResets > that.RUNNING_MAX_RESET_TRIES) {
+        if(sequentialResets >= that.RUNNING_MAX_RESET_TRIES) {
           Vibration.removeHandler(runningCallback);
           that.switchState('error');
         }
