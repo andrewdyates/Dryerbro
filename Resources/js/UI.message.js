@@ -46,12 +46,16 @@ var messageLabel = Titanium.UI.createLabel({
 messageWin.add(messageView);
 messageWin.add(messageLabel);
 
+var messageTimeout = null;
+
 function message(msg, duration){
   Ti.API.debug('message (debug): ' + msg);
   Ti.API.info('message (info): ' + msg);
   messageLabel.text = msg;
   messageWin.open();
-  setTimeout(function(){
+  if(messageTimeout) clearTimeout(messageTimeout);
+  messageTimeout = setTimeout(function(){
+    messageTimeout = null;
     messageWin.close({
       opacity:0,
       duration:500
