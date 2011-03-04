@@ -32,6 +32,7 @@ var StateMachine = {
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
   init: function(){
+    message("INIT");
     this._accelerometerHandler = function(e){
       Vibration.push(e.x, e.y, e.z);
       message("X: " + e.x + " Y:" + e.y);
