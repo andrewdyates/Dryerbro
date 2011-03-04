@@ -67,14 +67,16 @@ var StateMachine = {
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
-          Vibration.removeHandler(waitingCallback);
+          Ti.App.removeEventListener('vibration_updated', waitingCallback);
+          //Vibration.removeHandler(waitingCallback);
           that.switchState('running');
         }
       } else {
         sequential = 0;
       }
     }
-    Vibration.addHandler(waitingCallback);
+    Ti.App.addEventListener('vibration_updated', waitingCallback);
+    //Vibration.addHandler(waitingCallback);
   },
   
   _stateRunning: function(){
@@ -88,19 +90,22 @@ var StateMachine = {
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
-          Vibration.removeHandler(runningCallback);
+          //Vibration.removeHandler(runningCallback);
+          Ti.App.removeEventListener('vibration_updated', runningCallback);
           that.switchState('extended');
         }
       } else {
         sequential = 0;
         sequentialResets++;
         if(sequentialResets >= that.RUNNING_MAX_RESET_TRIES) {
-          Vibration.removeHandler(runningCallback);
+          //Vibration.removeHandler(runningCallback);
+          Ti.App.removeEventListener('vibration_updated', runningCallback);
           that.switchState('error');
         }
       }
     }
-    Vibration.addHandler(runningCallback);
+    //Vibration.addHandler(runningCallback);
+    Ti.App.addEventListener('vibration_updated', runningCallback);
   },
   
   _stateExtended: function(){
@@ -114,14 +119,16 @@ var StateMachine = {
       if(v < that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS) {
-          Vibration.removeHandler(extendedCallback);
+          //Vibration.removeHandler(extendedCallback);
+          Ti.App.removeEventListener('vibration_updated', extendedCallback);
           that.switchState('completed');
         }
       } else {
         sequential = 0;
       }
     }
-    Vibration.addHandler(extendedCallback);
+    //Vibration.addHandler(extendedCallback);
+    Ti.App.addEventListener('vibration_updated', extendedCallback);
   },
   
   _stateCompleted: function(){
