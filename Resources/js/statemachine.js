@@ -67,6 +67,8 @@ var StateMachine = {
     var that = this, sequential = 0;
     
     var waitingCallback = function(v) {
+      v = v.vibration;
+      message("WAITING: " + v);
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
@@ -90,6 +92,7 @@ var StateMachine = {
     var that = this, sequential = 0, sequentialResets = 0;
     
     var runningCallback = function(v) {
+      v = v.vibration;
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
@@ -119,6 +122,7 @@ var StateMachine = {
     var that = this, sequential = 0;
     
     var extendedCallback = function(v) {
+      v = v.vibration;
       if(v < that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS) {
