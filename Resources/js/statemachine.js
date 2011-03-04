@@ -31,19 +31,17 @@ var StateMachine = {
   
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
-  init: function(){
+  init: function() {
     Vibration.start();
     
     this.switchState('waiting');
   },
   
-  now: function()
-  {
+  now: function() {
     return (new Date()).getTime() / 1000;
   },
   
-  switchState: function(state)
-  {
+  switchState: function(state) {
     if(this._state == state) {
       Ti.API.info("Race Condition: State already running - " + state);
       return;
@@ -57,7 +55,7 @@ var StateMachine = {
     this['_state' + state.charAt(0).toUpperCase() + state.slice(1)]();
   },
   
-  _stateWaiting: function(){
+  _stateWaiting: function() {
     // Wait until we get continuous vibration for 5 seconds before proceeding
     Ti.App.fireEvent('vibrationStateWaiting');
     
@@ -77,7 +75,7 @@ var StateMachine = {
     Ti.App.addEventListener('vibration_update', waitingCallback);
   },
   
-  _stateRunning: function(){
+  _stateRunning: function() {
     // Must have vibrations for 15 consecutive seconds, then it goes into extended mode.
     // If 10 resets are reached, then it will throw an error.
     Ti.App.fireEvent('vibrationStateRunning');
@@ -102,7 +100,7 @@ var StateMachine = {
     Ti.App.addEventListener('vibration_update', runningCallback);
   },
   
-  _stateExtended: function(){
+  _stateExtended: function() {
     // Dryer has been opperating for at least 20 consecutive seconds.
     // This waits for 35 consecutive seconds of the dryer being off, then the dryer is done.
     Ti.App.fireEvent('vibrationStateExtended');
@@ -123,11 +121,11 @@ var StateMachine = {
     Ti.App.addEventListener('vibration_update', extendedCallback);
   },
   
-  _stateCompleted: function(){
+  _stateCompleted: function() {
     Ti.App.fireEvent('vibrationStateCompleted');
   },
   
-  _stateError: function(){
+  _stateError: function() {
     Ti.App.fireEvent('vibrationStateError', "Not sure what's going on, there was an error.");
   }
 }
