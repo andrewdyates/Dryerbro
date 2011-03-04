@@ -32,8 +32,6 @@ var StateMachine = {
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
   init: function(){
-    message("INIT");
-    
     Vibration.start();
     
     this.switchState('waiting');
