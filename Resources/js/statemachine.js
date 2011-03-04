@@ -9,6 +9,7 @@
 
 Ti.include("vibration.js");
 Ti.include("libs/utils.js");
+Ti.include("UI.message.js");
 
 var StateMachine = {
   _state: null,
@@ -33,6 +34,7 @@ var StateMachine = {
   init: function(){
     this._accelerometerHandler = function(e){
       Vibration.push(e.x, e.y, e.z);
+      message("X: " + e.x + " Y:" + e.y);
     };
     Ti.Accelerometer.addEventListener('update', this._accelerometerHandler);
     
