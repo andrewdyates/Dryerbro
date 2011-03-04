@@ -21,9 +21,9 @@ var StateMachine = {
     'error' // There was an error
   ],
   
-  WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS: 50, // Wait 5 seconds of active vibrations in waiting before moving to running
-  RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS: 15, // Wait 15 seconds of active vibrations in running before moving to extended
-  EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS: 350, // Wait 35 seconds of inactive vibrations before moving to completed
+  WAITING_SEQUENTIAL_ACTIVE_DURATION: 5, // Wait 5 seconds of active vibrations in waiting before moving to running
+  RUNNING_SEQUENTIAL_ACTIVE_DURATION: 15, // Wait 15 seconds of active vibrations in running before moving to extended
+  EXTENDED_SEQUENTIAL_INACTIVE_DURATION: 35, // Wait 35 seconds of inactive vibrations before moving to completed
   
   RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
   
@@ -33,16 +33,15 @@ var StateMachine = {
   
   init: function(){
     message("INIT");
-    /*
-    this._accelerometerHandler = function(e){
-      Vibration.push(e.x, e.y, e.z);
-      message("X: " + e.x + " Y:" + e.y);
-    };
-    Ti.Accelerometer.addEventListener('update', this._accelerometerHandler);
-    */
+    
     Vibration.start();
     
     this.switchState('waiting');
+  },
+  
+  now: function()
+  {
+    return (new Date()).getTime() / 1000;
   },
   
   switchState: function(state)
@@ -64,24 +63,20 @@ var StateMachine = {
     // Wait until we get continuous vibration for 5 seconds before proceeding
     Ti.App.fireEvent('vibrationStateWaiting');
     
-    var that = this, sequential = 0;
+    var that = this, begin = this.now();
     
     var waitingCallback = function(v) {
       v = v.vibration;
-      message("WAITING: " + v);
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
-        sequential++;
-        if(sequential >= that.WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
+        if(that.now() - begin >= that.WAITING_SEQUENTIAL_ACTIVE_DURATION) {
           Ti.App.removeEventListener('vibration_update', waitingCallback);
-          //Vibration.removeHandler(waitingCallback);
           that.switchState('running');
         }
       } else {
-        sequential = 0;
+        begin = that.now();
       }
     }
     Ti.App.addEventListener('vibration_update', waitingCallback);
-    //Vibration.addHandler(waitingCallback);
   },
   
   _stateRunning: function(){
@@ -89,28 +84,23 @@ var StateMachine = {
     // If 10 resets are reached, then it will throw an error.
     Ti.App.fireEvent('vibrationStateRunning');
     
-    var that = this, sequential = 0, sequentialResets = 0;
+    var that = this, begin = this.now(), resets = 0;
     
     var runningCallback = function(v) {
       v = v.vibration;
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
-        sequential++;
-        if(sequential >= that.RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
-          //Vibration.removeHandler(runningCallback);
+        if(that.now() - begin >= that.RUNNING_SEQUENTIAL_ACTIVE_DURATION) {
           Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('extended');
         }
       } else {
-        sequential = 0;
-        sequentialResets++;
-        if(sequentialResets >= that.RUNNING_MAX_RESET_TRIES) {
-          //Vibration.removeHandler(runningCallback);
+        begin = that.now();
+        if(++resets >= that.RUNNING_MAX_RESET_TRIES) {
           Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('error');
         }
       }
     }
-    //Vibration.addHandler(runningCallback);
     Ti.App.addEventListener('vibration_update', runningCallback);
   },
   
@@ -119,22 +109,19 @@ var StateMachine = {
     // This waits for 35 consecutive seconds of the dryer being off, then the dryer is done.
     Ti.App.fireEvent('vibrationStateExtended');
     
-    var that = this, sequential = 0;
+    var that = this, begin = this.now();
     
     var extendedCallback = function(v) {
       v = v.vibration;
       if(v < that.ACTIVE_VIBRATION_THRESHOLD) {
-        sequential++;
-        if(sequential >= that.EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS) {
-          //Vibration.removeHandler(extendedCallback);
+        if(that.now() - begin >= that.EXTENDED_SEQUENTIAL_INACTIVE_DURATION) {
           Ti.App.removeEventListener('vibration_update', extendedCallback);
           that.switchState('completed');
         }
       } else {
-        sequential = 0;
+        begin = that.now();
       }
     }
-    //Vibration.addHandler(extendedCallback);
     Ti.App.addEventListener('vibration_update', extendedCallback);
   },
   
