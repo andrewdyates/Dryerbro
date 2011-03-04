@@ -9,6 +9,7 @@
 
 Ti.include("libs/json.js");
 Ti.include("libs/md5.js");
+Ti.include("keys.js");
 
 function Persons(){
   this.persons = [];
@@ -82,5 +83,12 @@ Persons.prototype.get = function(index){
 }
 
 Persons.prototype.dispatchNotifications = function(message){
-  var persons = JSON.stringify(this.persons);
+  var data = JSON.stringify(this.persons);
+  var hash = md5(Keys.salt + data);
+  
+  var xhr = Titanium.Network.createHTTPClient();
+  xhr.onload = function(){};
+  xhr.onerror = function(){};
+  xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + hash);
+  xhr.send();
 }
