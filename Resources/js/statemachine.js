@@ -33,11 +33,14 @@ var StateMachine = {
   
   init: function(){
     message("INIT");
+    /*
     this._accelerometerHandler = function(e){
       Vibration.push(e.x, e.y, e.z);
       message("X: " + e.x + " Y:" + e.y);
     };
     Ti.Accelerometer.addEventListener('update', this._accelerometerHandler);
+    */
+    Vibration.start();
     
     this.switchState('waiting');
   },
