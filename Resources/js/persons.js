@@ -80,3 +80,7 @@ Persons.prototype.remove = function(index){
 Persons.prototype.get = function(index){
   return this.persons[index] || null;
 }
+
+Persons.prototype.dispatchNotifications = function(message){
+  var persons = JSON.stringify(this.persons);
+}

@@ -9,8 +9,11 @@
 
 Ti.include("UI.message.js");
 Ti.include("statemachine.js");
+Ti.include("persons.js");
 
 var win = Titanium.UI.currentWindow;
+
+var persons = new Persons();
 
 var tf = Titanium.UI.createTextArea({
     value: "Chill, we're waiting on your dryer...",
@@ -74,6 +77,7 @@ Ti.App.addEventListener('vibrationStateExtended', function(){
 
 Ti.App.addEventListener('vibrationStateCompleted', function(){
   tf.value = "Pretty sure dryer's done, dude.";
+  persons.load();
 });
 
 Ti.App.addEventListener('vibrationStateError', function(message){
