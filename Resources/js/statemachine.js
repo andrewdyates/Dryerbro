@@ -72,7 +72,7 @@ var StateMachine = {
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         sequential++;
         if(sequential >= that.WAITING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
-          Ti.App.removeEventListener('vibration_updated', waitingCallback);
+          Ti.App.removeEventListener('vibration_update', waitingCallback);
           //Vibration.removeHandler(waitingCallback);
           that.switchState('running');
         }
@@ -80,7 +80,7 @@ var StateMachine = {
         sequential = 0;
       }
     }
-    Ti.App.addEventListener('vibration_updated', waitingCallback);
+    Ti.App.addEventListener('vibration_update', waitingCallback);
     //Vibration.addHandler(waitingCallback);
   },
   
@@ -97,7 +97,7 @@ var StateMachine = {
         sequential++;
         if(sequential >= that.RUNNING_SEQUENTIAL_ACTIVE_VIBRATIONS) {
           //Vibration.removeHandler(runningCallback);
-          Ti.App.removeEventListener('vibration_updated', runningCallback);
+          Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('extended');
         }
       } else {
@@ -105,13 +105,13 @@ var StateMachine = {
         sequentialResets++;
         if(sequentialResets >= that.RUNNING_MAX_RESET_TRIES) {
           //Vibration.removeHandler(runningCallback);
-          Ti.App.removeEventListener('vibration_updated', runningCallback);
+          Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('error');
         }
       }
     }
     //Vibration.addHandler(runningCallback);
-    Ti.App.addEventListener('vibration_updated', runningCallback);
+    Ti.App.addEventListener('vibration_update', runningCallback);
   },
   
   _stateExtended: function(){
@@ -127,7 +127,7 @@ var StateMachine = {
         sequential++;
         if(sequential >= that.EXTENDED_SEQUENTIAL_INACTIVE_VIBRATIONS) {
           //Vibration.removeHandler(extendedCallback);
-          Ti.App.removeEventListener('vibration_updated', extendedCallback);
+          Ti.App.removeEventListener('vibration_update', extendedCallback);
           that.switchState('completed');
         }
       } else {
@@ -135,7 +135,7 @@ var StateMachine = {
       }
     }
     //Vibration.addHandler(extendedCallback);
-    Ti.App.addEventListener('vibration_updated', extendedCallback);
+    Ti.App.addEventListener('vibration_update', extendedCallback);
   },
   
   _stateCompleted: function(){
