@@ -103,14 +103,12 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
   persons.load();
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onload = function(){
-    tf.value = this.responseText;
+    tf.value = "Pretty sure dryer's done, dude. Errybody's been notified."
   };
   xhr.onerror = function(){};
   var people = JSON.stringify(persons.persons);
   var hash = md5(Keys.salt + people);
-  var url = 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + Titanium.App.Properties.getString('message');
-  tf.value = url;
-  xhr.open("GET", url);
+  xhr.open("GET", 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + Titanium.App.Properties.getString('message'));
   xhr.send();
 });
 
