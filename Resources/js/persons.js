@@ -91,6 +91,6 @@ Persons.prototype.dispatchNotifications = function(message, onload){
     onload(this.responseText);
   };
   xhr.onerror = function(){};
-  xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + data + '&message=' + message);
+  xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + message);
   xhr.send();
 }

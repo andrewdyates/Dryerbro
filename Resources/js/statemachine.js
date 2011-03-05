@@ -21,9 +21,9 @@ var StateMachine = {
     'error' // There was an error
   ],
   
-  WAITING_SEQUENTIAL_ACTIVE_DURATION: 5, // Wait 5 seconds of active vibrations in waiting before moving to running
-  RUNNING_SEQUENTIAL_ACTIVE_DURATION: 15, // Wait 15 seconds of active vibrations in running before moving to extended
-  EXTENDED_SEQUENTIAL_INACTIVE_DURATION: 35, // Wait 35 seconds of inactive vibrations before moving to completed
+  WAITING_SEQUENTIAL_ACTIVE_DURATION: 1, // Wait 5 seconds of active vibrations in waiting before moving to running
+  RUNNING_SEQUENTIAL_ACTIVE_DURATION: 1, // Wait 15 seconds of active vibrations in running before moving to extended
+  EXTENDED_SEQUENTIAL_INACTIVE_DURATION: 1, // Wait 35 seconds of inactive vibrations before moving to completed
   
   RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
   
