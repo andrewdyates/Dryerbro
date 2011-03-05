@@ -46,6 +46,23 @@ var tf_label = Titanium.UI.createTextField({
 });
 win.add(tf_label);
 
+var vib_label = Titanium.UI.createTextField({
+  font:{fontSize:14, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+  color: '#25bfff',
+  textAlign: 'right',
+  editable: false,
+  enabled: false,
+  right: 20,
+  top: 168,
+  height: 20,
+  value: '0'
+});
+win.add(vib_label);
+
+Ti.App.addEventListener('vibration_update', function(v){
+  vib_label.value = v.vibration;
+});
+
 var action = Titanium.UI.createButton({
   color: '#FFF',
   backgroundImage:'../images/btn_red_off.png',
