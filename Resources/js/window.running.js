@@ -55,7 +55,7 @@ var vib_label = Titanium.UI.createTextField({
   right: 20,
   top: 168,
   height: 20,
-  value: '0'
+  value: ''
 });
 win.add(vib_label);
 
