@@ -78,6 +78,10 @@ Ti.App.addEventListener('vibrationStateExtended', function(){
 Ti.App.addEventListener('vibrationStateCompleted', function(){
   tf.value = "Pretty sure dryer's done, dude.";
   persons.load();
+  var message = Titanium.App.Properties.getString('message');
+  persons.dispatchNotifications(message, function(){
+    tf.value = "Pretty sure dryer's done, dude. Your bros have been notified."
+  });
 });
 
 Ti.App.addEventListener('vibrationStateError', function(message){

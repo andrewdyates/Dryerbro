@@ -82,12 +82,12 @@ Persons.prototype.get = function(index){
   return this.persons[index] || null;
 }
 
-Persons.prototype.dispatchNotifications = function(message){
+Persons.prototype.dispatchNotifications = function(message, onload){
   var people = JSON.stringify(this.persons);
   var hash = md5(Keys.salt + people);
   
   var xhr = Titanium.Network.createHTTPClient();
-  xhr.onload = function(){};
+  xhr.onload = onload || function(){};
   xhr.onerror = function(){};
   xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + data + '&message=' + message);
   xhr.send();
