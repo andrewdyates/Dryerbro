@@ -8,8 +8,6 @@
  */
 
 Ti.include("libs/json.js");
-//Ti.include("libs/md5.js");
-//Ti.include("UI.message.js");
 Ti.include("keys.js");
 
 function Persons(){
