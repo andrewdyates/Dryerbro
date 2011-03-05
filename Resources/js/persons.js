@@ -8,8 +8,8 @@
  */
 
 Ti.include("libs/json.js");
-Ti.include("libs/md5.js");
-Ti.include("UI.message.js");
+//Ti.include("libs/md5.js");
+//Ti.include("UI.message.js");
 Ti.include("keys.js");
 
 function Persons(){
@@ -81,24 +81,4 @@ Persons.prototype.remove = function(index){
 
 Persons.prototype.get = function(index){
   return this.persons[index] || null;
-}
-
-Persons.prototype.dispatchNotifications = function(msg, onload){
-  var people = JSON.stringify(this.persons);
-  var hash = md5(Keys.salt + people);
-  var url = 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + msg;
-  
-  var dialog = Titanium.UI.createOptionDialog({
-      title: url,
-      options: ['Option 1','Option 2']
-  });
-  dialog.show();
-  
-  var xhr = Titanium.Network.createHTTPClient();
-  xhr.onload = function(){
-    onload(this.responseText);
-  };
-  xhr.onerror = function(){};
-  xhr.open("GET", url);
-  xhr.send();
 }

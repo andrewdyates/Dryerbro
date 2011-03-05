@@ -7,6 +7,8 @@
  * URL: http://erickerr.com
  */
 
+Ti.include("libs/json.js");
+Ti.include("libs/md5.js");
 Ti.include("UI.message.js");
 Ti.include("statemachine.js");
 Ti.include("persons.js");
@@ -82,24 +84,34 @@ action.addEventListener('click', function(){
 
 Ti.App.addEventListener('vibrationStateWaiting', function(){
   tf.value = "Chill, we're waiting on your dryer...";
+  win.setTitle('Waiting')
 });
 
 Ti.App.addEventListener('vibrationStateRunning', function(){
   tf.value = "Dryer's good to go.  You'll be fresh in no time.";
+  win.setTitle('Running');
 });
 
 Ti.App.addEventListener('vibrationStateExtended', function(){
   tf.value = "Dryer's running great bro.";
+  win.setTitle('Running');
 });
 
 Ti.App.addEventListener('vibrationStateCompleted', function(){
   tf.value = "Pretty sure dryer's done, dude.";
+  win.setTitle('Completed');
   persons.load();
-  var message = Titanium.App.Properties.getString('message');
-  persons.dispatchNotifications(message, function(t){
-    tf.value = t;
-    //tf.value = "Pretty sure dryer's done, dude. Your bros have been notified."
-  });
+  var xhr = Titanium.Network.createHTTPClient();
+  xhr.onload = function(){
+    tf.value = this.responseText;
+  };
+  xhr.onerror = function(){};
+  var people = JSON.stringify(persons.persons);
+  var hash = md5(Keys.salt + people);
+  var url = 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + Titanium.App.Properties.getString('message');
+  tf.value = url;
+  xhr.open("GET", url);
+  xhr.send();
 });
 
 Ti.App.addEventListener('vibrationStateError', function(message){
@@ -108,10 +120,15 @@ Ti.App.addEventListener('vibrationStateError', function(message){
 
 StateMachine.init();
 
-/*
-var sms_demo = Titanium.UI.createButton({title: 'SMS'});
-win.rightNavButton = sms_demo;
 
+var BUTTON = Titanium.UI.createButton({title: '!!!'});
+//win.rightNavButton = BUTTON;
+
+BUTTON.addEventListener('click', function(){
+  Ti.App.fireEvent('vibrationStateCompleted');
+});
+
+/*
 sms_demo.addEventListener('click', function(){
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onload = function(){

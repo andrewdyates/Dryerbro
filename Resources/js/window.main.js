@@ -163,7 +163,7 @@ action.addEventListener('click', function(){
     var runningwin = Titanium.UI.createWindow({
       url: 'window.running.js',
       id: 'runningwin1',
-      title: 'Running',
+      title: 'Waiting',
       barColor: '#0b2a55',
       top: 0,
       left: 0,
