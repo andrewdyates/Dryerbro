@@ -7,7 +7,7 @@
  * URL: http://erickerr.com
  */
 
-Ti.include("vibration.js");
+Ti.include("libs/vibration_js/vibration.js");
 Ti.include("libs/utils.js");
 Ti.include("UI.message.js");
 
