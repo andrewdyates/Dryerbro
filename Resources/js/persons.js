@@ -89,7 +89,7 @@ Persons.prototype.dispatchNotifications = function(msg, onload){
   var url = 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + msg;
   
   var dialog = Titanium.UI.createOptionDialog({
-      title: url
+      title: url,
       options: ['Option 1','Option 2']
   });
   dialog.show();
