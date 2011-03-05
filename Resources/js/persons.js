@@ -89,6 +89,6 @@ Persons.prototype.dispatchNotifications = function(message){
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onload = function(){};
   xhr.onerror = function(){};
-  xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + hash);
+  xhr.open("GET",'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + data);
   xhr.send();
 }
