@@ -9,6 +9,7 @@
 
 Ti.include("libs/json.js");
 Ti.include("keys.js");
+Ti.include("db.js");
 
 function Persons(){
   this.persons = [];
@@ -47,15 +48,14 @@ Persons.prototype._isDuplicatePerson = function(person){
 }
 
 Persons.prototype.load = function(){ //Database Load
-  var persons = Titanium.App.Properties.getString(this.keyProperty);
-  if(persons == null || persons.length == 0) persons = "[]";
+  var persons = DB.get(this.keyProperty, "[]");
   this.persons = JSON.parse(persons);
   this.length = this.persons.length;
   return this;
 }
 
 Persons.prototype.save = function(){ //Database Save
-  Titanium.App.Properties.setString(this.keyProperty, JSON.stringify(this.persons));
+  DB.set(this.keyProperty, JSON.stringify(this.persons))
   return this;
 }
 

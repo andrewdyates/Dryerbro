@@ -12,6 +12,7 @@ Ti.include("libs/md5.js");
 Ti.include("UI.message.js");
 Ti.include("statemachine.js");
 Ti.include("persons.js");
+Ti.include("db.js");
 
 var win = Titanium.UI.currentWindow;
 
@@ -84,7 +85,7 @@ action.addEventListener('click', function(){
 
 Ti.App.addEventListener('vibrationStateWaiting', function(){
   tf.value = "Chill, we're waiting on your dryer...";
-  win.setTitle('Waiting')
+  win.setTitle('Waiting');
 });
 
 Ti.App.addEventListener('vibrationStateRunning', function(){
@@ -103,12 +104,12 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
   persons.load();
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onload = function(){
-    tf.value = "Pretty sure dryer's done, dude. Errybody's been notified."
+    tf.value = "Pretty sure dryer's done, dude. Errybody's been notified.";
   };
   xhr.onerror = function(){};
   var people = JSON.stringify(persons.persons);
   var hash = md5(Keys.salt + people);
-  xhr.open("GET", 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + Titanium.App.Properties.getString('message'));
+  xhr.open("GET", 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + DB.get('message'));
   xhr.send();
 });
 

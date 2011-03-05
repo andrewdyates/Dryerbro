@@ -11,15 +11,14 @@ Ti.include("libs/utils.js");
 Ti.include("UI.message.js");
 Ti.include("UI.helper.js");
 Ti.include("persons.js");
+Ti.include("db.js");
 
 var win = Titanium.UI.currentWindow;
 var persons = new Persons();
 
 tf_default = "Hey bro, laundry's done!";
-tf_value = Titanium.App.Properties.getString("message");
-if(tf_value == null || tf_value.length == 0){
-  tf_value = tf_default;
-}
+tf_value = DB.get("message", tf_default);
+DB.set("message", tf_value);
 
 var tf = Titanium.UI.createTextArea({
     value: tf_value,
@@ -48,7 +47,7 @@ tf.addEventListener('focus', function(){
 tf.addEventListener('blur', function(){
   if(tf.value == '') tf.value = tf_default;
   action.show();
-  Titanium.App.Properties.setString("message", tf.value)
+  DB.set("message", tf.value);
   tf.height = 100;
 });
 tf.show();
@@ -89,7 +88,7 @@ bros.add(bros_count);
 Ti.App.addEventListener('personsChange', function(){
   persons.load(); //Reload
   Ti.API.info("EVENT personsChange");
-  Ti.API.info("persons: " + Titanium.App.Properties.getString(persons.keyProperty));
+  Ti.API.info("persons: " + DB.get(persons.keyProperty));
   bros_count.setValue('bro'.pluralize(persons.length));
   if(persons.length > 0) broCountError.hide();
 });
