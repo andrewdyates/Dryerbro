@@ -119,12 +119,14 @@ Ti.App.addEventListener('vibrationStateError', function(message){
 StateMachine.init();
 
 
+/*
 var BUTTON = Titanium.UI.createButton({title: '!!!'});
-//win.rightNavButton = BUTTON;
+win.rightNavButton = BUTTON;
 
 BUTTON.addEventListener('click', function(){
   Ti.App.fireEvent('vibrationStateCompleted');
 });
+*/
 
 /*
 sms_demo.addEventListener('click', function(){
