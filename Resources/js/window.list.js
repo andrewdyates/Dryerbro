@@ -120,7 +120,7 @@ table.addEventListener('click', function(e){
   var alert = Titanium.UI.createAlertDialog({
     title: person.name + ' (' + method + ')',
     message: 'Do you want to remove this bro?',
-    buttonNames: ['Cancel','OK']
+    buttonNames: ['Cancel','Remove']
   });
   alert.addEventListener('click', function(e){
     if(e.index == 0) return; //They canceled
