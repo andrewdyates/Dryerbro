@@ -10,6 +10,7 @@
 Ti.include("libs/json.js");
 Ti.include("libs/md5.js");
 Ti.include("UI.message.js");
+Ti.include("UI.helper.js");
 Ti.include("statemachine.js");
 Ti.include("persons.js");
 Ti.include("db.js");
@@ -83,6 +84,14 @@ action.addEventListener('click', function(){
   win.close();
 });
 
+Ti.App.addEventListener('vibrationStateWaitingDelay', function(){
+  var h = helper('tip', 'Pro Tip', 'Put device on dryer, let it do work.');
+  h.top = 166;
+  win.add(h);
+  h.show();
+  setTimeout(function(){ h.hide(); }, 6000);
+});
+
 Ti.App.addEventListener('vibrationStateWaiting', function(){
   tf.value = "Chill, we're waiting on your dryer...";
   win.setTitle('Waiting');
@@ -104,7 +113,7 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
   persons.load();
   var xhr = Titanium.Network.createHTTPClient();
   xhr.onload = function(){
-    tf.value = "Pretty sure dryer's done, dude. Errybody's been notified.";
+    tf.value = "Pretty sure dryer's done, dude. Errbody's been notified.";
   };
   xhr.onerror = function(){};
   var people = JSON.stringify(persons.persons);

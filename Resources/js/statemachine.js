@@ -25,6 +25,8 @@ var StateMachine = {
   RUNNING_SEQUENTIAL_ACTIVE_DURATION: 15, // Wait 15 seconds of active vibrations in running before moving to extended
   EXTENDED_SEQUENTIAL_INACTIVE_DURATION: 35, // Wait 35 seconds of inactive vibrations before moving to completed
   
+  WAITING_INACTIVE_DELAY: 10, // Show a tip after 10 seconds to put the device on a dryer in Waiting.
+  
   RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
   
   ACTIVE_VIBRATION_THRESHOLD: 20,
@@ -61,10 +63,15 @@ var StateMachine = {
     
     var that = this, begin = this.now();
     
+    var delayTimeout = setTimeout(function(){
+      Ti.App.fireEvent('vibrationStateWaitingDelay');
+    }, this.WAITING_INACTIVE_DELAY * 1000)
+    
     var waitingCallback = function(v) {
       v = v.vibration;
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         if(that.now() - begin >= that.WAITING_SEQUENTIAL_ACTIVE_DURATION) {
+          clearTimeout(delayTimeout);
           Ti.App.removeEventListener('vibration_update', waitingCallback);
           that.switchState('running');
         }
