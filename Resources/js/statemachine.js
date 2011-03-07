@@ -29,7 +29,7 @@ var StateMachine = {
   
   RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
   
-  ACTIVE_VIBRATION_THRESHOLD: 20,
+  ACTIVE_VIBRATION_THRESHOLD: 8,
   
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
