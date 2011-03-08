@@ -11,6 +11,10 @@ Ti.include("libs/vibration_js/vibration.js");
 Ti.include("libs/utils.js");
 Ti.include("UI.message.js");
 
+// Disable phone sleep
+// http://stackoverflow.com/questions/2035636/preventing-sleep-in-titanium-for-iphone
+Ti.App.idleTimerDisabled = true;
+
 var StateMachine = {
   _state: null,
   _states: [
@@ -29,7 +33,7 @@ var StateMachine = {
   
   RUNNING_MAX_RESET_TRIES: 40, // Number of times to reset in running before throwing an error
   
-  ACTIVE_VIBRATION_THRESHOLD: 8,
+  ACTIVE_VIBRATION_THRESHOLD: 9,
   
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
