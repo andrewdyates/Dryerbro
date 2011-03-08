@@ -27,9 +27,9 @@ var StateMachine = {
   
   WAITING_INACTIVE_DELAY: 10, // Show a tip after 10 seconds to put the device on a dryer in Waiting.
   
-  RUNNING_MAX_RESET_TRIES: 10, // Number of times to reset in running before throwing an error
+  RUNNING_MAX_RESET_TRIES: 40, // Number of times to reset in running before throwing an error
   
-  ACTIVE_VIBRATION_THRESHOLD: 8,
+  ACTIVE_VIBRATION_THRESHOLD: 2.5,
   
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
