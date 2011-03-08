@@ -29,7 +29,7 @@ var StateMachine = {
   
   RUNNING_MAX_RESET_TRIES: 40, // Number of times to reset in running before throwing an error
   
-  ACTIVE_VIBRATION_THRESHOLD: 2.5,
+  ACTIVE_VIBRATION_THRESHOLD: 8,
   
   _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
   
@@ -65,7 +65,7 @@ var StateMachine = {
     
     var delayTimeout = setTimeout(function(){
       Ti.App.fireEvent('vibrationStateWaitingDelay');
-    }, this.WAITING_INACTIVE_DELAY * 1000)
+    }, this.WAITING_INACTIVE_DELAY * 1000);
     
     var waitingCallback = function(v) {
       v = v.vibration;
@@ -78,7 +78,7 @@ var StateMachine = {
       } else {
         begin = that.now();
       }
-    }
+    };
     Ti.App.addEventListener('vibration_update', waitingCallback);
   },
   
@@ -103,7 +103,7 @@ var StateMachine = {
           that.switchState('error');
         }
       }
-    }
+    };
     Ti.App.addEventListener('vibration_update', runningCallback);
   },
   
@@ -116,7 +116,7 @@ var StateMachine = {
     
     var extendedCallback = function(v) {
       v = v.vibration;
-      if(v < that.ACTIVE_VIBRATION_THRESHOLD) {
+      if(v <= that.ACTIVE_VIBRATION_THRESHOLD) {
         if(that.now() - begin >= that.EXTENDED_SEQUENTIAL_INACTIVE_DURATION) {
           Ti.App.removeEventListener('vibration_update', extendedCallback);
           that.switchState('completed');
@@ -124,7 +124,7 @@ var StateMachine = {
       } else {
         begin = that.now();
       }
-    }
+    };
     Ti.App.addEventListener('vibration_update', extendedCallback);
   },
   
