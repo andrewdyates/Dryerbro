@@ -98,7 +98,7 @@ Ti.App.addEventListener('vibrationStateWaiting', function(){
 });
 
 Ti.App.addEventListener('vibrationStateRunning', function(){
-  tf.value = "Dryer's good to go.  You'll be fresh in no time.";
+  tf.value = "Dryer's good to go. We'll just check that everything is running OK for a little bit, and then you'll be fresh in no time.";
   win.setTitle('Running');
 });
 
@@ -123,7 +123,7 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
 });
 
 Ti.App.addEventListener('vibrationStateError', function(message){
-  tf.value = "Not sure what's going on, there was an error.";
+  tf.value = "Not sure what's going on, there was an error. Press \"Cancel Tracking\" and try again.";
 });
 
 StateMachine.init();
