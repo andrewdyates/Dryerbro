@@ -35,11 +35,14 @@ var StateMachine = {
   
   ACTIVE_VIBRATION_THRESHOLD: 9,
   
-  _accelerometerHandler: null, // Pointer to accelerometer handler to remove later if necessary
+  _callbackHandler: null, // Pointer to handler of current vibration callbacks
   
-  init: function() {
+  init: function(win) {
     Vibration.start();
-    
+    win.addEventListener('close', function(){
+      if(this._callbackHandler)
+        Ti.App.removeEventListener('vibration_update', this._callbackHandler);
+    }.bind(this));
     this.switchState('waiting');
   },
   
@@ -57,6 +60,12 @@ var StateMachine = {
       return;
     }
     Ti.API.info("StateMachine: Current State - " + state);
+    
+    if(this._callbackHandler) {
+      Ti.App.removeEventListener('vibration_update', this._callbackHandler);
+      this._callbackHandler = null;
+    }
+    
     this._state = state;
     this['_state' + state.charAt(0).toUpperCase() + state.slice(1)]();
   },
@@ -71,19 +80,19 @@ var StateMachine = {
       Ti.App.fireEvent('vibrationStateWaitingDelay');
     }, this.WAITING_INACTIVE_DELAY * 1000);
     
-    var waitingCallback = function(v) {
+    this._callbackHandler = function(v) {
       v = v.vibration;
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         if(that.now() - begin >= that.WAITING_SEQUENTIAL_ACTIVE_DURATION) {
           clearTimeout(delayTimeout);
-          Ti.App.removeEventListener('vibration_update', waitingCallback);
           that.switchState('running');
         }
       } else {
         begin = that.now();
       }
     };
-    Ti.App.addEventListener('vibration_update', waitingCallback);
+    
+    Ti.App.addEventListener('vibration_update', this._callbackHandler);
   },
   
   _stateRunning: function() {
@@ -93,22 +102,20 @@ var StateMachine = {
     
     var that = this, begin = this.now(), resets = 0;
     
-    var runningCallback = function(v) {
+    this._callbackHandler = function(v) {
       v = v.vibration;
       if(v >= that.ACTIVE_VIBRATION_THRESHOLD) {
         if(that.now() - begin >= that.RUNNING_SEQUENTIAL_ACTIVE_DURATION) {
-          Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('extended');
         }
       } else {
         begin = that.now();
         if(++resets >= that.RUNNING_MAX_RESET_TRIES) {
-          Ti.App.removeEventListener('vibration_update', runningCallback);
           that.switchState('error');
         }
       }
     };
-    Ti.App.addEventListener('vibration_update', runningCallback);
+    Ti.App.addEventListener('vibration_update', this._callbackHandler);
   },
   
   _stateExtended: function() {
@@ -118,18 +125,17 @@ var StateMachine = {
     
     var that = this, begin = this.now();
     
-    var extendedCallback = function(v) {
+    this._callbackHandler = function(v) {
       v = v.vibration;
       if(v <= that.ACTIVE_VIBRATION_THRESHOLD) {
         if(that.now() - begin >= that.EXTENDED_SEQUENTIAL_INACTIVE_DURATION) {
-          Ti.App.removeEventListener('vibration_update', extendedCallback);
           that.switchState('completed');
         }
       } else {
         begin = that.now();
       }
     };
-    Ti.App.addEventListener('vibration_update', extendedCallback);
+    Ti.App.addEventListener('vibration_update', this._callbackHandler);
   },
   
   _stateCompleted: function() {
