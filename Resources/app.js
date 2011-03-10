@@ -9,6 +9,8 @@
 
 var tabGroup = Titanium.UI.createTabGroup({id:'tabGroup1'});
 
+var netConnected = Ti.Network.online;
+
 var winmain = Titanium.UI.createWindow({
   url: 'js/window.main.js',
   id: 'win1',
@@ -31,3 +33,20 @@ tabGroup.addTab(tab1);
 tabGroup.open({
   transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
 });
+
+
+if (! netConnected) {
+    alert("Hey bro, ya need internets to tell bros bout laundry.");
+}
+Titanium.Network.addEventListener('change', function(e)
+{
+    if (e.online && ! netConnected) {
+	alert("OK bro, now you're connected.");
+	netConnected = True;
+    }
+    if (! e.online) {
+	alert("Hey bro, ya need internets to tell bros bout laundry.");
+	netConnected = False;
+    }
+});
+
