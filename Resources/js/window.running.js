@@ -118,7 +118,7 @@ Ti.App.addEventListener('vibrationStateCompleted', function(){
   xhr.onerror = function(){};
   var people = JSON.stringify(persons.persons);
   var hash = md5(Keys.salt + people);
-  xhr.open("GET", 'http://erickerr.com/dryerbro/gateway.php?hash=' + hash + '&data=' + people + '&message=' + DB.get('message'));
+  xhr.open("GET", 'http://dryerbro.com/gateway.php?hash=' + hash + '&data=' + people + '&message=' + DB.get('message'));
   xhr.send();
 });
 
