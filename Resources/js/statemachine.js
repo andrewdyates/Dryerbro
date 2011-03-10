@@ -40,10 +40,11 @@ var StateMachine = {
   init: function(win) {
     Vibration.start();
     win.addEventListener('close', function(){
-      if(this._callbackHandler)
+      if(this._callbackHandler) {
         Ti.App.removeEventListener('vibration_update', this._callbackHandler);
-        Vibration.stop();
-//        Vibration.clear();
+      }
+      Vibration.stop();
+      //Vibration.clear();
     }.bind(this));
     this.switchState('waiting');
   },
