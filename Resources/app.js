@@ -34,7 +34,6 @@ tabGroup.open({
   transition:Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
 });
 
-
 if (! netConnected) {
   alert("Hey bro, ya need internets to tell bros bout laundry.");
 }

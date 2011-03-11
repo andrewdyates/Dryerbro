@@ -173,3 +173,21 @@ action.addEventListener('click', function(){
     Titanium.UI.currentTab.open(runningwin);
   }
 });
+
+iads = Ti.UI.iOS.createAdView({
+  width: 'auto',
+  height: 'auto',
+  bottom: -50,
+  borderColor: '#000000',
+  backgroundColor: '#000000'
+});
+
+t1 = Titanium.UI.createAnimation({bottom:0, duration:250});
+t2 = Titanium.UI.createAnimation({top: 295, duration:250});
+
+iads.addEventListener('load', function(){
+  iads.animate(t1);
+  action.animate(t2);
+});
+
+Titanium.UI.currentWindow.add(iads);
