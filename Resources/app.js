@@ -38,15 +38,3 @@ tabGroup.open({
 if (! netConnected) {
   alert("Hey bro, ya need internets to tell bros bout laundry.");
 }
-
-Titanium.Network.addEventListener('change', function(e) {
-  if (e.online && ! netConnected) {
-    alert("OK bro, now you're connected.");
-    netConnected = true;
-  }
-  if (! e.online) {
-    alert("Hey bro, ya need internets to tell bros bout laundry.");
-    netConnected = false;
-  }
-});
-
