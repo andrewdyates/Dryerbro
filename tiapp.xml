@@ -5,9 +5,9 @@
 <version>1.0</version>
 <publisher>dryerbro</publisher>
 <url>dryerbro.com</url>
-<description>No description provided</description>
+<description>DryerBro alerts you when your laundry's done.</description>
 <copyright>2011 by dryerbro</copyright>
-<icon>appicon.png</icon>
+<icon>default_app_logo.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
     <statusbar-style>default</statusbar-style>
