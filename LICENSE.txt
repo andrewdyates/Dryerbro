@@ -1,1 +1,1 @@
-Place your license text here.  This file will be incorporated with your app at package time.
+We are not responsible for lost, damaged, or stolen devices.
