@@ -28,3 +28,13 @@ Array.prototype.remove = function(from, to) {
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
 };
+
+//https://github.com/appcelerator/KitchenSink/blob/master/Resources/examples/version.js
+function isiOS4Plus(){
+  if (Titanium.Platform.name == 'iPhone OS'){
+    var version = Titanium.Platform.version.split(".");
+    var major = parseInt(version[0]);
+    if (major >= 4) return true;
+  }
+  return false;
+}

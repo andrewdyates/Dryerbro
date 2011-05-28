@@ -33,7 +33,7 @@ var StateMachine = {
   
   RUNNING_MAX_RESET_TRIES: 40, // Number of times to reset in running before throwing an error
   
-  ACTIVE_VIBRATION_THRESHOLD: 3,
+  ACTIVE_VIBRATION_THRESHOLD: 2.2,
   
   _callbackHandler: null, // Pointer to handler of current vibration callbacks
   

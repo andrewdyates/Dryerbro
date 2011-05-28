@@ -174,20 +174,29 @@ action.addEventListener('click', function(){
   }
 });
 
-iads = Ti.UI.iOS.createAdView({
-  width: 'auto',
-  height: 'auto',
-  bottom: -50,
-  borderColor: '#000000',
-  backgroundColor: '#000000'
-});
+function iAd(){
+  Ti.API.info('iAd');
+  iads = Ti.UI.iOS.createAdView({
+    width: 'auto',
+    height: 'auto',
+    bottom: -50,
+    borderColor: '#000000',
+    backgroundColor: '#000000'
+  });
+  
+  t1 = Titanium.UI.createAnimation({bottom:0, duration:250});
+  t2 = Titanium.UI.createAnimation({top: 295, duration:250});
+  
+  iads.addEventListener('load', function(){
+    iads.animate(t1);
+    action.animate(t2);
+  });
+  
+  Titanium.UI.currentWindow.add(iads);
+}
 
-t1 = Titanium.UI.createAnimation({bottom:0, duration:250});
-t2 = Titanium.UI.createAnimation({top: 295, duration:250});
+win.addEventListener('focus', iAd);
 
-iads.addEventListener('load', function(){
-  iads.animate(t1);
-  action.animate(t2);
-});
-
-Titanium.UI.currentWindow.add(iads);
+if (isiOS4Plus()) {
+  Ti.App.addEventListener('resume', iAd);
+}
