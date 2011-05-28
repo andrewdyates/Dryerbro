@@ -197,6 +197,6 @@ function iAd(){
 
 win.addEventListener('focus', iAd);
 
-if (isiOS4Plus()) {
+if (isiOS4Plus()){
   Ti.App.addEventListener('resume', iAd);
 }
